@@ -360,6 +360,7 @@ Discourse::Application.routes.draw do
     get "#{root_path}/:username/messages/:filter" => "user_actions#private_messages", constraints: { username: RouteFormat.username }
     get "#{root_path}/:username/messages/group/:group_name" => "user_actions#private_messages", constraints: { username: RouteFormat.username, group_name: RouteFormat.username }
     get "#{root_path}/:username/messages/group/:group_name/archive" => "user_actions#private_messages", constraints: { username: RouteFormat.username, group_name: RouteFormat.username }
+    get "#{root_path}/:username/messages/tag/:tag_id" => "user_actions#private_messages", constraints: { username: RouteFormat.username, tag_id: /[^\/]+?/ }
     get "#{root_path}/:username.json" => "users#show", constraints: { username: RouteFormat.username }, defaults: { format: :json }
     get({ "#{root_path}/:username" => "users#show", constraints: { username: RouteFormat.username, format: /(json|html)/ } }.merge(index == 1 ? { as: 'user' } : {}))
     put "#{root_path}/:username" => "users#update", constraints: { username: RouteFormat.username }, defaults: { format: :json }
@@ -602,6 +603,11 @@ Discourse::Application.routes.draw do
   get "topics/private-messages-group/:username/:group_name/archive.json" => "list#private_messages_group_archive", as: "topics_private_messages_group_archive", constraints: {
     username: RouteFormat.username,
     group_name: RouteFormat.username
+  }
+
+  get "topics/private-messages-tag/:username/:tag_id.json" => "list#private_messages_tag", as: "topics_private_messages_tag", constraints: {
+    username: RouteFormat.username,
+    tag_id: /[^\/]+?/
   }
 
   get 'embed/comments' => 'embed#comments'

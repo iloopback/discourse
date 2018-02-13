@@ -24,7 +24,7 @@ class Tag < ActiveRecord::Base
   # e.g., Tag.tags_by_count_query.where("topics.category_id = ?", category.id).count(Tag::COUNT_ARG)
   def self.tags_by_count_query(opts = {})
     q = Tag.joins("LEFT JOIN topic_tags ON tags.id = topic_tags.tag_id")
-      .joins("LEFT JOIN topics ON topics.id = topic_tags.topic_id AND topics.deleted_at IS NULL")
+      .joins("LEFT JOIN topics ON topics.id = topic_tags.topic_id AND topics.deleted_at IS NULL AND topics.archetype != 'private_message'")
       .group("tags.id, tags.name")
       .order('count_topics_id DESC')
     q = q.limit(opts[:limit]) if opts[:limit]
@@ -43,7 +43,7 @@ class Tag < ActiveRecord::Base
         SELECT COUNT(topics.id) AS topic_count, tags.id AS tag_id
         FROM tags
         LEFT JOIN topic_tags ON tags.id = topic_tags.tag_id
-        LEFT JOIN topics ON topics.id = topic_tags.topic_id AND topics.deleted_at IS NULL
+        LEFT JOIN topics ON topics.id = topic_tags.topic_id AND topics.deleted_at IS NULL AND topics.archetype != "private_message"
         GROUP BY tags.id
       ) x
       WHERE x.tag_id = t.id

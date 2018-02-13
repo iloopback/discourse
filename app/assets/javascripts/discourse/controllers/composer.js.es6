@@ -139,8 +139,7 @@ export default Ember.Controller.extend({
   canEditTags(canEditTitle, creatingPrivateMessage) {
     return !this.site.mobileView &&
             this.site.get('can_tag_topics') &&
-            canEditTitle &&
-            !creatingPrivateMessage;
+            canEditTitle;
   },
 
   @computed('model.whisper', 'model.unlistTopic')
