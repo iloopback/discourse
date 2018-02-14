@@ -102,9 +102,9 @@ export default Ember.Controller.extend(BufferedContent, {
     return extractLinkMeta(topic).domain;
   },
 
-  @computed
-  canEditTags() {
-    return this.site.get('can_tag_topics');
+  @computed('model.isPrivateMessage')
+  canEditTags(isPrivateMessage) {
+    return (!isPrivateMessage || this.get('currentUser.staff')) && this.site.get('can_tag_topics');
   },
 
   actions: {

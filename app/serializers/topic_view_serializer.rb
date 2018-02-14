@@ -239,7 +239,7 @@ class TopicViewSerializer < ApplicationSerializer
   end
 
   def include_tags?
-    SiteSetting.tagging_enabled
+    SiteSetting.tagging_enabled && (!object.topic.private_message? || scope.user&.staff?)
   end
 
   def topic_timer

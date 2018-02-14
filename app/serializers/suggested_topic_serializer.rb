@@ -15,7 +15,7 @@ class SuggestedTopicSerializer < ListableTopicSerializer
   end
 
   def include_tags?
-    SiteSetting.tagging_enabled
+    SiteSetting.tagging_enabled && (!object.private_message? || scope.user&.staff?)
   end
 
   def tags

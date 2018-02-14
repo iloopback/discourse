@@ -21,6 +21,7 @@ export default function(topic, params){
   let tags = topic.tags;
   let buffer = "";
   const isPrivateMessage = topic.get('isPrivateMessage');
+  const current_user = Discourse.User.current();
 
   if (params && params.mode === "list") {
     tags = topic.get("visibleListTags");

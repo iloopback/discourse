@@ -333,7 +333,7 @@ class ListController < ApplicationController
   def build_topic_list_options
     options = {}
     params[:page] = params[:page].to_i rescue 1
-    params[:tags] = [params[:tag_id]] if params[:tag_id].present?
+    params[:tags] = [params[:tag_id]] if params[:tag_id].present? && current_user.try(:staff?)
 
     TopicQuery.public_valid_options.each do |key|
       options[key] = params[key]
