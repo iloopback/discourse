@@ -1,28 +1,30 @@
 export default {
   name: 'register-service-worker',
 
-  initialize() {
-    // only allow service worker on android for now
-    if (!/(android)/i.test(navigator.userAgent)) {
+  initialize(container) {
+    window.addEventListener('load', () => {
+      const siteSettings = container.lookup('site-settings:main');
 
-      // remove old service worker
-      if ('serviceWorker' in navigator && navigator.serviceWorker.getRegistrations) {
-        navigator.serviceWorker.getRegistrations().then((registrations) => {
-          for(let registration of registrations) {
-            registration.unregister();
-          };
-        });
-      }
-
-    } else {
-
-      const isSecure = (document.location.protocol === 'https:') ||
+      const isSecured = (document.location.protocol === 'https:') ||
         (location.hostname === "localhost");
 
+      const isSupported= isSecured && ('serviceWorker' in navigator);
 
-      if (isSecure && ('serviceWorker' in navigator)) {
-        navigator.serviceWorker.register(`${Discourse.BaseUri}/service-worker.js`);
+      if (isSupported) {
+        if (siteSettings.native_app_install_banner || Discourse.InstallServiceWorker) {
+          navigator.serviceWorker
+            .register(`${Discourse.BaseUri}/service-worker.js`)
+            .catch(error => {
+              Ember.Logger.info(`Failed to register Service Worker: ${error}`);
+            });
+        } else {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            for(let registration of registrations) {
+              registration.unregister();
+            };
+          });
+        }
       }
-    }
+    });
   }
 };

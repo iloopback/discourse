@@ -1421,7 +1421,9 @@ uncategorized:
     default: true
     client: true
 
-  native_app_install_banner: false
+  native_app_install_banner:
+    default: false
+    client: true
 
   share_anonymized_statistics: true
 

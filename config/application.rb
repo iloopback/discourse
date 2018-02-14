@@ -97,6 +97,7 @@ module Discourse
       plugin-third-party.js
       markdown-it-bundle.js
       service-worker.js
+      sw.js
     }
 
     # Precompile all available locales
